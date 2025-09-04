@@ -113,15 +113,15 @@
         "dependencies": [
           1
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
             "title": "Design and Initialize IndexedDB Schema for Image and Job Data",
             "description": "Define and implement the IndexedDB schema for PromptJob and GeneratedImage models, including object stores and indexes for efficient querying (jobId, status, createdAt).",
             "dependencies": [],
-            "details": "Set up the IndexedDB database with object stores for PromptJob and GeneratedImage. Create necessary indexes to support efficient lookups and queries. Use TypeScript interfaces for schema typing and ensure robust error handling during database initialization.",
-            "status": "pending",
+            "details": "Set up the IndexedDB database with object stores for PromptJob and GeneratedImage. Create necessary indexes to support efficient lookups and queries. Use TypeScript interfaces for schema typing and ensure robust error handling during database initialization.\n<info added on 2025-09-04T20:25:30.155Z>\n## Files to add:\n- lib/storage/types.ts: Strongly-typed TypeScript interfaces and enums for PromptJob and GeneratedImage\n- lib/storage/indexeddb.ts: Browser-only IndexedDB open/upgrade helpers, schema creation, safe guards, and utilities\n\n## Schema (DB: \"imaginai\", version: 1):\n- ObjectStore: \"promptJobs\" (keyPath: \"id\")\n  - Indexes:\n    - \"status\" (non-unique)\n    - \"createdAt\" (non-unique)\n    - \"updatedAt\" (non-unique)\n- ObjectStore: \"generatedImages\" (keyPath: \"id\")\n  - Indexes:\n    - \"jobId\" (non-unique)\n    - \"createdAt\" (non-unique)\n\n## Types:\n- enum JobStatus = \"queued\" | \"processing\" | \"completed\" | \"failed\" | \"cancelled\"\n- interface PromptJob { id: string; prompt: string; negativePrompt?: string; model?: string; status: JobStatus; createdAt: number; updatedAt: number; error?: string }\n- interface GeneratedImage { id: string; jobId: string; blob: Blob; mimeType: string; width: number; height: number; seed?: number; createdAt: number }\n\n## Utilities to implement in indexeddb.ts:\n- isBrowser(): boolean\n- getIndexedDB(): IDBFactory | undefined (with vendor fallbacks)\n- openDatabase(): Promise<IDBDatabase> — opens DB, performs onupgradeneeded to create stores/indexes\n- withDatabase<T>(fn): Promise<T> — convenience helper to open/close DB around a callback\n- deleteDatabase(): Promise<void> — reset helper for dev\n- getDatabaseInfo(): Promise<{ stores: Array<{name: string; indexes: string[]}> }> — aid verification via devtools\n\n## Implementation constraints:\n- Guard all IDB access with isBrowser() and availability checks to avoid SSR issues in Next.js\n- Keep raw IndexedDB API (no external deps) for clarity and control\n- No CRUD yet (belongs to 2.2); only schema and safe initialization\n- Add robust error handling and promise wrappers for IDB open/delete operations\n\n## Verification approach:\n- After implementation, call getDatabaseInfo() in a client component or via console to verify stores and indexes exist.\n</info added on 2025-09-04T20:25:30.155Z>",
+            "status": "done",
             "testStrategy": "Verify database creation, object store and index presence using browser devtools. Test schema upgrades and backward compatibility."
           },
           {
@@ -131,8 +131,8 @@
             "dependencies": [
               "2.1"
             ],
-            "details": "Create a storage utility module in TypeScript that exposes async CRUD operations for each model. Ensure all operations handle errors gracefully and use transactions for atomicity. Optimize for performance by batching operations where possible.",
-            "status": "pending",
+            "details": "Create a storage utility module in TypeScript that exposes async CRUD operations for each model. Ensure all operations handle errors gracefully and use transactions for atomicity. Optimize for performance by batching operations where possible.\n<info added on 2025-09-04T20:27:37.451Z>\n## Implementation Strategy\n\n- Create a core `indexeddb.ts` utility module with generic helper functions:\n  - `promisifyRequest`: Convert IndexedDB request objects to Promises\n  - `getTransaction`: Create and manage transactions with proper error handling\n  - `getObjectStore`: Retrieve object store with correct transaction mode\n  - `getAll`: Retrieve all records from a store\n  - `getAllByIndex`: Query records using a specific index\n  - `getById`: Retrieve a single record by ID\n  - `put`: Create or update records\n  - `delete`: Remove records\n\n- Implement typed model-specific wrappers for:\n  - `PromptJob`: Strong typing for job data with status tracking\n  - `GeneratedImage`: Image storage with references to parent jobs\n\n- Create indexes to optimize queries:\n  - PromptJob: status, createdAt, updatedAt\n  - GeneratedImage: jobId, createdAt\n\n- Public API functions:\n  - PromptJob:\n    - `savePromptJob(job: PromptJob): Promise<string>`\n    - `getPromptJob(id: string): Promise<PromptJob | undefined>`\n    - `deletePromptJob(id: string): Promise<void>`\n    - `getPromptJobsByStatus(status: JobStatus): Promise<PromptJob[]>`\n    - `getAllPromptJobs(): Promise<PromptJob[]>`\n  \n  - GeneratedImage:\n    - `saveGeneratedImage(image: GeneratedImage): Promise<string>`\n    - `getGeneratedImage(id: string): Promise<GeneratedImage | undefined>`\n    - `deleteGeneratedImage(id: string): Promise<void>`\n    - `getGeneratedImagesByJobId(jobId: string): Promise<GeneratedImage[]>`\n\n- Implementation considerations:\n  - Ensure browser-only execution to avoid SSR issues\n  - Use appropriate transaction modes (readonly/readwrite)\n  - Provide clear error messages and handle not-found cases gracefully\n  - Keep operations atomic with proper transaction management\n  - Design for future extension with batch operations\n</info added on 2025-09-04T20:27:37.451Z>",
+            "status": "done",
             "testStrategy": "Write unit tests for all CRUD functions, covering normal and edge cases. Test with sample data for both models."
           },
           {
@@ -142,8 +142,8 @@
             "dependencies": [
               "2.2"
             ],
-            "details": "Enable storing image files as blobs or base64 strings in the GeneratedImage store. Implement functions to fetch and render images efficiently, using cursors for batch retrieval. Monitor storage usage and handle quota errors.",
-            "status": "pending",
+            "details": "Enable storing image files as blobs or base64 strings in the GeneratedImage store. Implement functions to fetch and render images efficiently, using cursors for batch retrieval. Monitor storage usage and handle quota errors.\n<info added on 2025-09-04T20:30:29.069Z>\n## Implementation Plan for Image Storage and Retrieval in IndexedDB\n\nExtend the existing CRUD utilities to support efficient image storage and retrieval with the following functions in lib/storage/indexeddb.ts:\n\n1. `getStorageEstimate()`: Promise<{ usage: number; quota: number; ratio: number }>\n   - Utilizes navigator.storage.estimate() API when available\n   - Returns current storage usage, total quota, and usage ratio\n   - Falls back to reasonable defaults when API unavailable\n\n2. `isNearQuota(threshold = 0.9)`: Promise<boolean>\n   - Leverages getStorageEstimate() to determine if storage usage exceeds threshold\n   - Returns true when usage/quota ratio is at or above the specified threshold\n   - Helps applications proactively manage storage before errors occur\n\n3. `getRecentGeneratedImages(limit = 50)`: Promise<GeneratedImage[]>\n   - Uses an index on createdAt field for efficient retrieval\n   - Implements reverse cursor to fetch most recent images first\n   - Limits results to specified count for performance optimization\n\nAll functions will include browser runtime detection to prevent SSR issues. Error handling for quota exceeded will be implemented at the request level, allowing callers to catch and handle these errors appropriately. This implementation focuses solely on the storage layer, with UI integration to be handled in subsequent tasks.\n</info added on 2025-09-04T20:30:29.069Z>",
+            "status": "done",
             "testStrategy": "Test storing and retrieving images of various sizes. Verify gallery rendering and storage quota updates in the UI."
           },
           {
@@ -151,8 +151,8 @@
             "title": "Create Secure localStorage Utilities for User Preferences and API Keys",
             "description": "Build a utility module for managing user settings and API keys in localStorage, including secure storage patterns and settings persistence.",
             "dependencies": [],
-            "details": "Implement functions to save, retrieve, and remove user preferences and API keys in localStorage. Use obfuscation or encryption for API keys. Ensure settings persist across reloads and are type-checked.",
-            "status": "pending",
+            "details": "Implement functions to save, retrieve, and remove user preferences and API keys in localStorage. Use obfuscation or encryption for API keys. Ensure settings persist across reloads and are type-checked.\n<info added on 2025-09-04T20:31:26.464Z>\n# Implementation Plan for Secure localStorage Utilities\n\n## File Structure\nCreate a new file: `lib/storage/local.ts`\n\n## Exported Functions\n- `isLocalStorageAvailable(): boolean` - Checks if localStorage is available in the current environment\n- `getItem<T>(key: string): T | undefined` - Type-safe retrieval of stored items\n- `setItem<T>(key: string, value: T): void` - Type-safe storage of items\n- `removeItem(key: string): void` - Removes an item from storage\n- `saveApiKey(service: string, key: string): void` - Securely stores API keys\n- `getApiKey(service: string): string | undefined` - Retrieves obfuscated API keys\n- `removeApiKey(service: string): void` - Removes stored API keys\n\n## Implementation Details\n- Use \"imaginai:\" prefix for all localStorage keys\n- Use \"imaginai:api:{service}\" pattern for API key storage\n- Implement obfuscation for API keys using base64 encoding and XOR with a salt\n- Generate a random per-session salt for additional obfuscation\n- Include type checking and schema validation for stored values\n- Implement error handling for storage quota issues\n- Ensure browser-only execution with appropriate runtime checks\n- Add JSON serialization/deserialization with proper error handling\n</info added on 2025-09-04T20:31:26.464Z>",
+            "status": "done",
             "testStrategy": "Test settings and API key persistence across sessions. Verify API key is not exposed in plain text in browser devtools."
           },
           {
@@ -163,8 +163,8 @@
               "2.3",
               "2.4"
             ],
-            "details": "Monitor IndexedDB and localStorage usage, displaying warnings when limits are near. Implement export (to JSON/ZIP) and import (with validation) for all stored data, supporting full backup and restore.",
-            "status": "pending",
+            "details": "Monitor IndexedDB and localStorage usage, displaying warnings when limits are near. Implement export (to JSON/ZIP) and import (with validation) for all stored data, supporting full backup and restore.\n<info added on 2025-09-04T20:32:28.731Z>\nImplement storage limit detection and data import/export functionality with the following components:\n\n1. Storage quota monitoring utilities:\n   - getStorageEstimate(): Returns current usage and quota information\n   - isNearQuota(threshold): Returns boolean when storage usage exceeds specified threshold percentage\n\n2. Data export functionality:\n   - exportAllData(): Returns Promise with JSON bundle containing:\n     - promptJobs array\n     - generatedImages array with blob data converted to base64 for portability\n\n3. Data import functionality:\n   - importAllData(payload): Processes JSON bundle with validation\n     - Validates schema integrity before import\n     - Converts base64 strings back to Blob objects\n     - Uses putValue operations for database insertion\n     - Handles potential quota errors during import\n     - Returns counts of successfully imported jobs and images\n\n4. Implementation notes:\n   - Transport format will use simple JSON (no ZIP compression required)\n   - Warning system will leverage isNearQuota for UI notifications\n   - Import process will return detailed success metrics for user feedback\n</info added on 2025-09-04T20:32:28.731Z>",
+            "status": "done",
             "testStrategy": "Simulate near-capacity storage conditions and verify warnings. Test export/import with various dataset sizes and validate data integrity after import."
           }
         ]
@@ -391,7 +391,7 @@
     ],
     "metadata": {
       "created": "2025-09-04T18:52:52.765Z",
-      "updated": "2025-09-04T20:16:44.768Z",
+      "updated": "2025-09-04T20:33:17.556Z",
       "description": "Tasks for master context"
     }
   }
