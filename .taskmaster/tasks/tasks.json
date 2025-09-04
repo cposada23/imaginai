@@ -1,0 +1,398 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Next.js Project with TailwindCSS and shadcn/ui",
+        "description": "Initialize the Next.js 15 project whithing the same root folder as the existing codebase with App Router, React 19, TailwindCSS, and shadcn/ui component library",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "details": "1. Create a new Next.js project using the App Router: `npx create-next-app@latest . --typescript --tailwind --app`\n2. Install shadcn/ui: `npx shadcn-ui@latest init`\n3. Configure Tailwind for dark/light theme with CSS variables\n4. Install additional dependencies: `npm install lucide-react react-hook-form zod @hookform/resolvers next-themes tailwindcss-animate`\n5. Setup basic project structure with app directory layout\n6. Configure tsconfig.json for path aliases\n7. Create theme provider component for dark/light/system mode support\n8. Setup basic layout component with responsive design\n9. Create responsive header component with theme toggle",
+        "testStrategy": "Verify project setup by running the development server and confirming that the application loads without errors. Test theme switching functionality and ensure responsive layout works across different viewport sizes.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Next.js project with App Router and TypeScript",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Install and configure TailwindCSS with CSS variables",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Initialize and configure shadcn/ui component library",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Install additional dependencies",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Setup project structure with app directory",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Configure TypeScript path aliases",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Create theme provider with dark/light/system mode support",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "Implement responsive header with theme toggle",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 9,
+            "title": "Setup responsive layout with proper styling",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 10,
+            "title": "Test development server and verify functionality",
+            "description": "",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement Client-Side Storage with IndexedDB and localStorage",
+        "description": "Create storage utilities for IndexedDB to store image data and localStorage for user preferences",
+        "details": "1. Create a storage utility module for IndexedDB operations\n2. Define database schema for PromptJob and GeneratedImage models\n3. Implement CRUD operations for both models\n4. Create indexes for efficient querying (jobId, status, createdAt)\n5. Implement localStorage utility for settings storage\n6. Create secure API key storage in localStorage\n7. Implement storage limit detection and warning system\n8. Add data export and import functionality",
+        "testStrategy": "Test IndexedDB operations by creating, reading, updating, and deleting sample data. Verify localStorage persistence across page reloads. Test storage limit detection by simulating near-capacity conditions.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design and Initialize IndexedDB Schema for Image and Job Data",
+            "description": "Define and implement the IndexedDB schema for PromptJob and GeneratedImage models, including object stores and indexes for efficient querying (jobId, status, createdAt).",
+            "dependencies": [],
+            "details": "Set up the IndexedDB database with object stores for PromptJob and GeneratedImage. Create necessary indexes to support efficient lookups and queries. Use TypeScript interfaces for schema typing and ensure robust error handling during database initialization.",
+            "status": "pending",
+            "testStrategy": "Verify database creation, object store and index presence using browser devtools. Test schema upgrades and backward compatibility."
+          },
+          {
+            "id": 2,
+            "title": "Implement TypeScript CRUD Utilities for IndexedDB Models",
+            "description": "Develop reusable, type-safe CRUD (Create, Read, Update, Delete) functions for both PromptJob and GeneratedImage models, ensuring proper error handling and transaction management.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "Create a storage utility module in TypeScript that exposes async CRUD operations for each model. Ensure all operations handle errors gracefully and use transactions for atomicity. Optimize for performance by batching operations where possible.",
+            "status": "pending",
+            "testStrategy": "Write unit tests for all CRUD functions, covering normal and edge cases. Test with sample data for both models."
+          },
+          {
+            "id": 3,
+            "title": "Develop Image Storage and Retrieval Logic in IndexedDB",
+            "description": "Implement logic to store, retrieve, and display image data (blobs or base64) in IndexedDB, supporting efficient gallery rendering and quota management.",
+            "dependencies": [
+              "2.2"
+            ],
+            "details": "Enable storing image files as blobs or base64 strings in the GeneratedImage store. Implement functions to fetch and render images efficiently, using cursors for batch retrieval. Monitor storage usage and handle quota errors.",
+            "status": "pending",
+            "testStrategy": "Test storing and retrieving images of various sizes. Verify gallery rendering and storage quota updates in the UI."
+          },
+          {
+            "id": 4,
+            "title": "Create Secure localStorage Utilities for User Preferences and API Keys",
+            "description": "Build a utility module for managing user settings and API keys in localStorage, including secure storage patterns and settings persistence.",
+            "dependencies": [],
+            "details": "Implement functions to save, retrieve, and remove user preferences and API keys in localStorage. Use obfuscation or encryption for API keys. Ensure settings persist across reloads and are type-checked.",
+            "status": "pending",
+            "testStrategy": "Test settings and API key persistence across sessions. Verify API key is not exposed in plain text in browser devtools."
+          },
+          {
+            "id": 5,
+            "title": "Implement Storage Limit Detection, Warning, and Data Import/Export",
+            "description": "Add logic to detect approaching storage limits, warn users, and provide data export/import functionality for backup and migration.",
+            "dependencies": [
+              "2.3",
+              "2.4"
+            ],
+            "details": "Monitor IndexedDB and localStorage usage, displaying warnings when limits are near. Implement export (to JSON/ZIP) and import (with validation) for all stored data, supporting full backup and restore.",
+            "status": "pending",
+            "testStrategy": "Simulate near-capacity storage conditions and verify warnings. Test export/import with various dataset sizes and validate data integrity after import."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Create Core UI Components and Layout",
+        "description": "Develop the main UI components including Navbar, PromptForm, FiltersBar, and base layout structure",
+        "details": "1. Create Navbar component with logo, search input, and settings button\n2. Implement responsive layout with appropriate grid system\n3. Create PromptForm component with textarea and collapsible advanced options\n4. Develop FiltersBar with filter controls (date range, status, aspect ratio, sort)\n5. Implement Settings dialog/drawer component\n6. Create Toast notification system for user feedback\n7. Implement loading/spinner components for async operations\n8. Ensure all components support both light and dark themes",
+        "testStrategy": "Test UI components in Storybook or with component testing. Verify responsive behavior across different viewport sizes. Ensure keyboard navigation works correctly and components meet accessibility standards.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement OpenAI API Integration",
+        "description": "Create service for interacting with OpenAI Images API using the gpt-image-1 model",
+        "details": "1. Create API client for OpenAI Images API\n2. Implement parameter mapping (aspect ratio to size, quality levels)\n3. Handle response format options (b64_json and default base64)\n4. Implement error handling for API errors (rate limits, authentication, etc.)\n5. Create retry mechanism with exponential backoff\n6. Add concurrency control to prevent rate limit issues\n7. Implement API key validation\n8. Create utility functions for parameter normalization",
+        "testStrategy": "Test API integration with mock responses. Verify parameter mapping works correctly. Test error handling by simulating various error conditions. Validate retry mechanism functions as expected.",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Develop Form Validation and Submission Logic",
+        "description": "Implement form validation using react-hook-form and zod, and create submission logic for image generation",
+        "details": "1. Define zod schema for prompt form validation\n2. Integrate react-hook-form with zod validation\n3. Implement form submission handler\n4. Create job creation process (queued status, placeholder cards)\n5. Implement validation for all form fields (prompt, quality, aspect ratio, etc.)\n6. Add form state management (loading, error, success)\n7. Create utility for generating unique jobId\n8. Implement form reset and re-submission functionality",
+        "testStrategy": "Test form validation with various input combinations. Verify error messages display correctly for invalid inputs. Test form submission flow and ensure proper state transitions occur.",
+        "priority": "high",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Timeline Grid with Infinite Scroll",
+        "description": "Create responsive timeline grid with infinite scroll and virtualization for displaying generated images",
+        "details": "1. Implement responsive grid layout (1/2/4 columns based on viewport)\n2. Create cursor-based pagination over IndexedDB data\n3. Implement infinite scroll with Intersection Observer\n4. Add virtualization to render only visible elements\n5. Create ResultCard component for displaying image items\n6. Implement scroll position preservation during updates\n7. Handle empty states and loading states\n8. Add support for partial updates (some images complete, some pending)",
+        "testStrategy": "Test infinite scroll with large datasets. Verify grid responsiveness across different viewport sizes. Test scroll position preservation during data updates. Verify virtualization improves performance with large image collections.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Image Processing and Optimization",
+        "description": "Create client-side image processing utilities for handling base64 images, compression, and format conversion",
+        "details": "1. Implement base64 to Blob conversion\n2. Create WEBP transcoding functionality\n3. Implement compression control based on quality settings\n4. Create thumbnail generation for timeline view\n5. Implement Web Worker for offloading processing tasks\n6. Add lazy loading with Intersection Observer\n7. Create utility for progressive image loading\n8. Implement efficient caching strategy for processed images",
+        "testStrategy": "Test image processing with various input formats and sizes. Verify compression works as expected. Measure performance impact of Web Worker implementation. Test thumbnail generation quality and performance.",
+        "priority": "medium",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement Details View for Image Sets",
+        "description": "Create detailed view for displaying all images from a specific prompt with metadata and actions",
+        "details": "1. Create route handler for `/prompt/[jobId]`\n2. Implement DetailsDrawer/Page component\n3. Create image carousel/grid for multiple images\n4. Display complete metadata (jobId, created, status, etc.)\n5. Implement re-run functionality to reload form with same prompt/options\n6. Add download button for each image\n7. Implement navigation between timeline and details view\n8. Add deep linking support",
+        "testStrategy": "Test details view with various image sets. Verify all metadata displays correctly. Test re-run functionality and confirm form populates correctly. Verify deep linking works with direct URL access.",
+        "priority": "medium",
+        "dependencies": [
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Filtering and Sorting Functionality",
+        "description": "Create filtering and sorting capabilities for the timeline view",
+        "details": "1. Implement date range filter with date picker component\n2. Create status filter (queued, running, completed, failed)\n3. Implement aspect ratio filter\n4. Add sort order control (newest, oldest)\n5. Create filter state management\n6. Implement filter persistence in localStorage\n7. Add filter reset functionality\n8. Create efficient query generation for filtered results",
+        "testStrategy": "Test each filter type individually and in combination. Verify filter persistence across page reloads. Test filter reset functionality. Measure query performance with various filter combinations.",
+        "priority": "medium",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Image Download Functionality",
+        "description": "Create functionality for downloading generated images in WEBP format",
+        "details": "1. Implement download utility for Blob to file conversion\n2. Create standard filename format: `imaginai_{jobId}_{index}.webp`\n3. Add download button to ResultCard and details view\n4. Implement download progress indication\n5. Add batch download for multiple images\n6. Create export functionality for prompt group as ZIP\n7. Implement error handling for download failures\n8. Add download completion notification",
+        "testStrategy": "Test download functionality with various image sizes. Verify filename format is correct. Test batch download and ZIP export. Verify downloaded files can be opened correctly.",
+        "priority": "medium",
+        "dependencies": [
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement Settings Management",
+        "description": "Create settings interface for API key management, default options, and theme preferences",
+        "details": "1. Implement SettingsDialog component\n2. Create masked input field for API key\n3. Implement default options configuration (quality, aspect ratio, etc.)\n4. Add theme selector (system, light, dark)\n5. Create data management tools (clear images/keys)\n6. Implement settings persistence in localStorage\n7. Add validation for settings inputs\n8. Create settings reset functionality",
+        "testStrategy": "Test settings persistence across page reloads. Verify API key masking works correctly. Test theme switching functionality. Verify data clearing operations work as expected.",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Implement Background Job Management",
+        "description": "Create client-side queue system for managing image generation jobs",
+        "details": "1. Implement job queue system (queued → running → completed/failed)\n2. Create concurrency limiting mechanism\n3. Implement retry policy with exponential backoff\n4. Add job status tracking and updates\n5. Create event system for job lifecycle events\n6. Implement error handling and recovery\n7. Add partial success support\n8. Create job cancellation functionality",
+        "testStrategy": "Test job queue with multiple concurrent jobs. Verify concurrency limiting prevents rate limit issues. Test retry mechanism with simulated failures. Verify job status updates correctly throughout lifecycle.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Implement Client-Side Moderation",
+        "description": "Create basic client-side content moderation for prompt filtering",
+        "details": "1. Implement keyword checking for potentially sensitive content\n2. Create warning dialog with confirmation for flagged content\n3. Add disclaimer in settings and first-run modal\n4. Implement information display about data usage and limitations\n5. Create moderation level setting (fixed to \"low\")\n6. Add bypass option with explicit confirmation\n7. Implement logging for moderation events (local only)\n8. Create utility for prompt sanitization",
+        "testStrategy": "Test moderation with various prompt inputs including sensitive content. Verify warning dialog appears appropriately. Test bypass confirmation flow. Ensure moderation settings persist correctly.",
+        "priority": "low",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Implement Accessibility Features",
+        "description": "Enhance application with accessibility features for keyboard navigation and screen readers",
+        "details": "1. Add ARIA labels to all interactive elements\n2. Implement keyboard navigation support\n3. Create focus management system\n4. Add screen-reader friendly notifications\n5. Implement alt text generation from prompt text\n6. Create keyboard shortcuts for common actions\n7. Add skip navigation links\n8. Implement focus indicators for interactive elements",
+        "testStrategy": "Test keyboard navigation throughout the application. Verify screen reader compatibility with NVDA or VoiceOver. Test focus management during modal dialogs and dynamic content updates.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          6,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Implement Error Handling and Recovery",
+        "description": "Create comprehensive error handling system for API errors, storage issues, and other failure scenarios",
+        "details": "1. Implement error boundary components\n2. Create user-friendly error messages for common errors\n3. Implement rate-limit detection and handling\n4. Add storage error detection and recovery\n5. Create network error handling with retry options\n6. Implement timeout handling\n7. Add partial success support for batch operations\n8. Create error logging system (local only)",
+        "testStrategy": "Test error handling with simulated API errors, network failures, and storage issues. Verify user-friendly messages display correctly. Test recovery mechanisms for various error scenarios.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 16,
+        "title": "Implement Performance Optimization",
+        "description": "Optimize application performance for smooth user experience with large image collections",
+        "details": "1. Implement timeline virtualization\n2. Create lazy image loading system\n3. Optimize IndexedDB queries with appropriate indexes\n4. Implement efficient re-rendering patterns\n5. Add Web Worker support for image processing\n6. Create separate thumbnail cache for grid view\n7. Implement progressive loading for images\n8. Add performance monitoring and optimization",
+        "testStrategy": "Measure performance metrics before and after optimization. Test with large datasets (100+ images). Verify smooth scrolling in timeline view. Measure memory usage during extended application use.",
+        "priority": "medium",
+        "dependencies": [
+          6,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 17,
+        "title": "Implement Import/Export Functionality",
+        "description": "Create data import/export capabilities for backup and transfer",
+        "details": "1. Implement export prompt group as ZIP (images + metadata.json)\n2. Create full library export functionality\n3. Add import capability for previously exported data\n4. Implement progress indication for import/export operations\n5. Create validation for imported data\n6. Add conflict resolution for imports\n7. Implement selective import options\n8. Create export format documentation",
+        "testStrategy": "Test export functionality with various dataset sizes. Verify exported ZIP contains all expected files. Test import functionality with previously exported data. Verify conflict resolution works correctly.",
+        "priority": "low",
+        "dependencies": [
+          2,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 18,
+        "title": "Implement Client Observability",
+        "description": "Create client-side logging and debugging capabilities",
+        "details": "1. Implement in-memory + IndexedDB event log\n2. Create job lifecycle tracking system\n3. Add error capturing and logging\n4. Implement optional console debugging\n5. Add toggle in settings for debug mode\n6. Create performance monitoring system\n7. Implement log export functionality\n8. Add anonymized error reporting option",
+        "testStrategy": "Test logging system with various application events. Verify logs persist correctly in IndexedDB. Test log export functionality. Verify debug mode toggle works correctly.",
+        "priority": "low",
+        "dependencies": [
+          2,
+          15
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-09-04T18:52:52.765Z",
+      "updated": "2025-09-04T20:16:44.768Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
